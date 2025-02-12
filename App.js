@@ -1,20 +1,25 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import Header from './src/components/layout/Header';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { config } from '@gluestack-ui/config';
 
-const App = () => {
+import Header from './src/components/layout/Header';
+import NavBar from './src/components/navigation/NavBar';  // <-- Import el NavBar
+import MoviesContainer from './src/components/containers/MoviesContainer';
+
+export default function App() {
   return (
     <SafeAreaProvider>
       <GluestackUIProvider config={config}>
-        <Header />
+        <NavigationContainer>
+          <Header />
+          <NavBar />
+
+        </NavigationContainer>
         <StatusBar style="auto" />
       </GluestackUIProvider>
     </SafeAreaProvider>
   );
-};
-
-export default App;
+}
