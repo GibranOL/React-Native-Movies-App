@@ -10,7 +10,7 @@ const NavBar = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false, // oculta el header nativo del tab
+        headerShown: false,
       }}
     >
       <Tab.Screen 

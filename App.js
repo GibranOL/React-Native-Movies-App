@@ -13,7 +13,6 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <GluestackUIProvider config={config}>
-        {/* Ponemos NavigationContainer aquí para que envuelva a AppStack */}
         <NavigationContainer>
           <AppStack />
         </NavigationContainer>

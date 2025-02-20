@@ -2,26 +2,26 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { IMAGE_BASE_URL } from '../../../config/apiConfig';
 
-const MovieCard = ({ movie, navigation }) => {
+const TVCard = ({ show, navigation }) => {
   return (
     <View style={styles.cardContainer}>
       <Image
-        source={{ uri: `${IMAGE_BASE_URL}${movie.poster_path}` }}
+        source={{ uri: `${IMAGE_BASE_URL}${show.poster_path}` }}
         style={styles.posterImage}
       />
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{movie.title}</Text>
+        <Text style={styles.title}>{show.name}</Text>
         <Text style={styles.subtitle}>
-          Release: {movie.release_date || 'N/A'}
+          First Air Date: {show.first_air_date || 'N/A'}
         </Text>
         <Text style={styles.subtitle}>
-          Popularity: {movie.popularity?.toFixed(1)}
+          Popularity: {show.popularity?.toFixed(1)}
         </Text>
 
         <TouchableOpacity
           style={styles.button}
           onPress={() =>
-            navigation.navigate('MoreDetails', { movieId: movie.id })
+            navigation.navigate('MoreDetails', { tvId: show.id })
           }
         >
           <Text style={styles.buttonText}>More Details</Text>
@@ -31,8 +31,7 @@ const MovieCard = ({ movie, navigation }) => {
   );
 };
 
-export default MovieCard;
-
+export default TVCard;
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 8,
     marginBottom: 10,
-    overflow: 'hidden', 
+    overflow: 'hidden',
   },
   posterImage: {
     width: 100,
