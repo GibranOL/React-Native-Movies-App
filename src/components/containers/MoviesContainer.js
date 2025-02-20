@@ -1,40 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList } from 'react-native';
-// import your UI kit components if desired
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { getMovies } from '../../services/api';
+import MovieCard from './listItems/MovieCard'; 
 
-const MoviesContainer = () => {
+const MoviesContainer = ({ navigation }) => {
   const [movies, setMovies] = useState([]);
-  const [movieType, setMovieType] = useState('popular'); 
-  // could be 'now_playing', 'popular', 'top_rated', 'upcoming'
+  const [movieType, setMovieType] = useState('popular');
+  const [isFocus, setIsFocus] = useState(false);
+
+  const data = [
+    { label: 'Now Playing', value: 'now_playing' },
+    { label: 'Popular', value: 'popular' },
+    { label: 'Top Rated', value: 'top_rated' },
+    { label: 'Upcoming', value: 'upcoming' },
+  ];
 
   useEffect(() => {
     fetchMovies(movieType);
   }, [movieType]);
 
   const fetchMovies = async (type) => {
-    try {
-      const url = `https://api.themoviedb.org/3/movie/${type}?api_key=YOUR_API_KEY`;
-      const response = await fetch(url);
-      const data = await response.json();
-      setMovies(data.results || []);
-    } catch (err) {
-      console.error(err);
-    }
+    const results = await getMovies(type);
+    setMovies(results);
   };
 
   return (
-    <View>
-      {/* You could create a custom dropdown to change `movieType` */}
-      <Text>Selected Category: {movieType}</Text>
-      {/* Show list of movies */}
+    <View style={styles.container}>
+      {/* Dropdown */}
+      <Dropdown
+        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        data={data}
+        labelField="label"
+        valueField="value"
+        placeholder={!isFocus ? 'Select movie type' : '...'}
+        value={movieType}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
+        onChange={(item) => {
+          setMovieType(item.value);
+          setIsFocus(false);
+        }}
+      />
+
+      {/* FlatList con MovieCard */}
       <FlatList
+        style={{ marginTop: 20 }}
         data={movies}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.title}</Text>
-            <Text>Popularity: {item.popularity}</Text>
-          </View>
+          <MovieCard
+            movie={item}
+            navigation={navigation}
+          />
         )}
       />
     </View>
@@ -42,3 +62,24 @@ const MoviesContainer = () => {
 };
 
 export default MoviesContainer;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  placeholderStyle: {
+    color: 'gray',
+  },
+  selectedTextStyle: {
+    color: 'black',
+  },
+});

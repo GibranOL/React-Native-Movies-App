@@ -1,18 +1,22 @@
-import React, { useState } from 'react'
-import { View, Text } from 'react-native'
-import Form from '../forms/Forms'
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import Form from '../forms/Forms';
+import { searchMovies } from '../../services/api';
+import MovieCard from '../containers/listItems/MovieCard';
 
-const SearchContainer = () => {
-  const [query, setQuery] = useState('')
+const SearchContainer = ({ navigation }) => {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
 
   const handleInputChange = (value) => {
-    setQuery(value)
-  }
+    setQuery(value);
+  };
 
-  const handleSearch = () => {
-    // Do your fetch with `search/movie`, passing `query` to the API
-    // ...
-  }
+  const handleSearch = async () => {
+    if (!query) return; // Evitar búsqueda vacía
+    const movies = await searchMovies(query);
+    setResults(movies);
+  };
 
   return (
     <View>
@@ -21,9 +25,36 @@ const SearchContainer = () => {
         onInputChange={handleInputChange}
         onSearch={handleSearch}
       />
-      {/* Render search results here */}
-    </View>
+
+      {/* If no search */}
+      {!query && <Text style={styles.prompt}>Enter a movie name...</Text>}
+
+      {/* Lista */}
+      <FlatList
+        data={results}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <MovieCard movie={item} navigation={navigation} />
+        )}
+      />
+          </View>
   )
 }
 
-export default SearchContainer
+export default SearchContainer;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  header: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  prompt: {
+    fontStyle: 'italic',
+    marginBottom: 8,
+  },
+});

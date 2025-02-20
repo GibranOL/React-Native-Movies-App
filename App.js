@@ -5,21 +5,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { config } from '@gluestack-ui/config';
 
-import Header from './src/components/layout/Header';
-import NavBar from './src/components/navigation/NavBar';  // <-- Import el NavBar
-import MoviesContainer from './src/components/containers/MoviesContainer';
+
+
+import AppStack from './src/components/stacks/AppStack';
 
 export default function App() {
   return (
     <SafeAreaProvider>
       <GluestackUIProvider config={config}>
+        {/* Ponemos NavigationContainer aquí para que envuelva a AppStack */}
         <NavigationContainer>
-          <Header />
-          <NavBar />
-
+          <AppStack />
         </NavigationContainer>
         <StatusBar style="auto" />
       </GluestackUIProvider>
     </SafeAreaProvider>
   );
 }
+

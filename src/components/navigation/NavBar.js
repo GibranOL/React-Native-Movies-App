@@ -4,14 +4,13 @@ import MoviesContainer from '../containers/MoviesContainer';
 import SearchContainer from '../containers/SearchContainer';
 import TVShowsContainer from '../containers/TVShowsContainer';
 
-
 const Tab = createBottomTabNavigator();
 
 const NavBar = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false 
+        headerShown: false, // oculta el header nativo del tab
       }}
     >
       <Tab.Screen 
